@@ -1,4 +1,3 @@
-// task_routes.js
 var ObjectID = require('mongodb').ObjectID;
 module.exports = function(app, client) {
     var db = client.db('TaskManagerDB');
@@ -7,7 +6,7 @@ module.exports = function(app, client) {
         const details = { '_id': new ObjectID(id) };
         db.collection('tasks').findOne(details, (err, item) => {
             if (err) {
-                res.send({ 'error': 'An error has occurred' });
+                res.send({ 'error': 'An error has occurred on DB' });
             } else {
                 res.send(item);
             }
@@ -24,7 +23,7 @@ module.exports = function(app, client) {
         };
         db.collection('tasks').insert(task, (err, result) => {
             if (err) {
-                res.send({ 'error': 'An error has occurred' });
+                res.send({ 'error': 'An error has occurred on DB' });
             } else {
                 res.send(result.ops[0]._id);
             }
@@ -36,7 +35,7 @@ module.exports = function(app, client) {
         const details = { '_id': new ObjectID(id) };
         db.collection('tasks').remove(details, (err, item) => {
             if (err) {
-                res.send({ 'error': 'An error has occurred' });
+                res.send({ 'error': 'An error has occurred on DB' });
             } else {
                 res.send('task ' + id + ' deleted!');
             }
@@ -55,7 +54,7 @@ module.exports = function(app, client) {
         };
         db.collection('tasks').update(details, task, (err, result) => {
             if (err) {
-                res.send({ 'error': 'An error has occurred' });
+                res.send({ 'error': 'An error has occurred on DB' });
             } else {
                 res.send(task);
             }
