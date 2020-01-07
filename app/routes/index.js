@@ -1,6 +1,6 @@
-// routes/index.js
-const noteRoutes = require('./note_routes');
+const taskRoutes = require('./task_routes');
+const dayRoutes = require('./day_routes');
 module.exports = function(app, db) {
-    noteRoutes(app, db);
-    // Тут, позже, будут и другие обработчики маршрутов 
+    taskRoutes(app, db);
+    dayRoutes(app, db);
 };
