@@ -16,8 +16,8 @@ module.exports = function(app, client) {
 
     app.post('/tasks', (req, res) => {
         const task = {
-            text: req.body.body || null,
             title: req.body.title || null,
+            text: req.body.text || null,
             status: req.body.status || null,
             urgency: req.body.urgency || null,
             date: req.body.date ? new Date(req.body.date) : new Date(),
@@ -46,7 +46,13 @@ module.exports = function(app, client) {
     app.put('/tasks/:id', (req, res) => {
         const id = req.params.id;
         const details = { '_id': new ObjectID(id) };
-        const task = { text: req.body.body, title: req.body.title };
+        const task = {
+            title: req.body.title || null,
+            text: req.body.text || null,
+            status: req.body.status || null,
+            urgency: req.body.urgency || null,
+            date: req.body.date ? new Date(req.body.date) : new Date(),
+        };
         db.collection('tasks').update(details, task, (err, result) => {
             if (err) {
                 res.send({ 'error': 'An error has occurred' });
