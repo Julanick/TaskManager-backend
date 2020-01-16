@@ -2,7 +2,6 @@ var ObjectID = require('mongodb').ObjectID;
 module.exports = function(app, dbClient) {
     var database = dbClient.db('TaskManagerDB');
     app.get('/tasks/:id', (request, response) => {
-        response.setHeader('Access-Control-Allow-Origin', '*');
         const id = request.params.id;
         const details = { '_id': new ObjectID(id) };
         database.collection('tasks').findOne(details, function(err, item) {
@@ -15,7 +14,6 @@ module.exports = function(app, dbClient) {
     });
 
     app.post('/tasks', function(request, response) {
-        response.setHeader('Access-Control-Allow-Origin', '*');
         const taskToCreate = {
             title: request.body.title,
             text: request.body.text,
@@ -33,7 +31,6 @@ module.exports = function(app, dbClient) {
     });
 
     app.delete('/tasks/:id', function(request, response) {
-        response.setHeader('Access-Control-Allow-Origin', '*');
         const id = request.params.id;
         const details = { '_id': new ObjectID(id) };
         database.collection('tasks').remove(details, function(err, item) {
@@ -46,7 +43,6 @@ module.exports = function(app, dbClient) {
     });
 
     app.put('/tasks/:id', function(request, response) {
-        response.setHeader('Access-Control-Allow-Origin', '*');
         const id = request.params.id;
         const details = { '_id': new ObjectID(id) };
         const updatedToTask = {

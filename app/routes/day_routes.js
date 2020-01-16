@@ -2,7 +2,6 @@ module.exports = function(app, dbClient) {
     var db = dbClient.db('TaskManagerDB');
 
     app.get('/days', function(req, res) {
-        res.setHeader('Access-Control-Allow-Origin', '*');
         db.collection('tasks')
             .find({ 'date': new Date(req.query.date) })
             .toArray(function(err, item) {
