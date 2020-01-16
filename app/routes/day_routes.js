@@ -3,7 +3,9 @@ module.exports = function(app, dbClient) {
 
     app.get('/days', function(req, res) {
         db.collection('tasks')
-            .find({ 'date': new Date(req.query.date) })
+            .find({
+                'date': req.query.date
+            })
             .toArray(function(err, item) {
                 if (err) {
                     res.send({ 'error': 'An error has occurred' });
