@@ -1,62 +1,66 @@
 var ObjectID = require('mongodb').ObjectID;
-module.exports = function(app, client) {
-    var db = client.db('TaskManagerDB');
-    app.get('/tasks/:id', (req, res) => {
-        const id = req.params.id;
+module.exports = function(app, dbClient) {
+    var database = dbClient.db('TaskManagerDB');
+    app.get('/tasks/:id', (request, response) => {
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        const id = request.params.id;
         const details = { '_id': new ObjectID(id) };
-        db.collection('tasks').findOne(details, (err, item) => {
+        database.collection('tasks').findOne(details, function(err, item) {
             if (err) {
-                res.send({ 'error': 'An error has occurred on DB' });
+                response.send({ 'error': 'An error has occurred on DB' });
             } else {
-                res.send(item);
+                response.send(item);
             }
         });
     });
 
-    app.post('/tasks', (req, res) => {
-        const task = {
-            title: req.body.title || null,
-            text: req.body.text || null,
-            status: req.body.status || null,
-            urgency: req.body.urgency || null,
-            date: req.body.date ? new Date(req.body.date) : new Date(),
+    app.post('/tasks', function(request, response) {
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        const taskToCreate = {
+            title: request.body.title,
+            text: request.body.text,
+            status: request.body.status,
+            urgency: request.body.urgency,
+            date: request.body.date
         };
-        db.collection('tasks').insert(task, (err, result) => {
+        database.collection('tasks').insert(taskToCreate, function(err, result) {
             if (err) {
-                res.send({ 'error': 'An error has occurred on DB' });
+                response.send({ 'error': 'An error has occurred on DB' });
             } else {
-                res.send(result.ops[0]._id);
+                response.send(result.ops[0]._id);
             }
         });
     });
 
-    app.delete('/tasks/:id', (req, res) => {
-        const id = req.params.id;
+    app.delete('/tasks/:id', function(request, response) {
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        const id = request.params.id;
         const details = { '_id': new ObjectID(id) };
-        db.collection('tasks').remove(details, (err, item) => {
+        database.collection('tasks').remove(details, function(err, item) {
             if (err) {
-                res.send({ 'error': 'An error has occurred on DB' });
+                response.send({ 'error': 'An error has occurred on DB' });
             } else {
-                res.send('task ' + id + ' deleted!');
+                response.send('task ' + id + ' deleted!');
             }
         });
     });
 
-    app.put('/tasks/:id', (req, res) => {
-        const id = req.params.id;
+    app.put('/tasks/:id', function(request, response) {
+        response.setHeader('Access-Control-Allow-Origin', '*');
+        const id = request.params.id;
         const details = { '_id': new ObjectID(id) };
-        const task = {
-            title: req.body.title || null,
-            text: req.body.text || null,
-            status: req.body.status || null,
-            urgency: req.body.urgency || null,
-            date: req.body.date ? new Date(req.body.date) : new Date(),
+        const updatedToTask = {
+            title: request.body.title,
+            text: request.body.text,
+            status: request.body.status,
+            urgency: request.body.urgency,
+            date: request.body.date
         };
-        db.collection('tasks').update(details, task, (err, result) => {
+        database.collection('tasks').update(details, updatedToTask, function(err, result) {
             if (err) {
-                res.send({ 'error': 'An error has occurred on DB' });
+                response.send({ 'error': 'An error has occurred on DB' });
             } else {
-                res.send(task);
+                response.send(updatedToTask);
             }
         });
     });
